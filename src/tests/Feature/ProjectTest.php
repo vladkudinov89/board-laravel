@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\Project;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -49,6 +48,17 @@ class ProjectTest extends AbstractFeatureTestCase
 
         $this->post('/projects', $attributes)
             ->assertSessionHasErrors('description');
+    }
+
+    public function test_a_user_can_view_project()
+    {
+        $this->withoutExceptionHandling();
+
+        $project = factory('App\Models\Project')->create();
+
+        $this->get($project->path())
+            ->assertSee($project->title)
+            ->assertSee($project->description);
     }
 
 

@@ -8,17 +8,10 @@
     <title>Birdboard</title>
 </head>
 <body>
-<h1>Birdboard</h1>
+<h1>Birdboard current view ID {{ $project->id  }}</h1>
 
-<ul>
-    @forelse($projects as $project)
-        <li>
-            <a href="{{$project->path()}}">{{$project->title}}</a>
-        </li>
-    @empty
-        <li>No projects yet.</li>
-    @endforelse
-</ul>
+<h2>Project title - {{$project->title}}</h2>
+<p>Project description - {{$project->description}}</p>
 
 </body>
 </html>
