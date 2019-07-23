@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -11,13 +12,22 @@ class ProjectTest extends AbstractFeatureTestCase
 {
     use WithFaker, RefreshDatabase, WithoutMiddleware;
 
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
+    public function test_only_auth_users_can_create_project()
+    {
+        $this->withoutExceptionHandling();
+
+        $attributes = factory('App\Models\Project')->raw();
+
+        $this
+            ->post('/projects', $attributes)
+            ->assertRedirect('login');
+    }
+
     public function test_user_can_create_project()
     {
+
+        $this->actingAs(factory(User::class)->create());
+
         $this->withoutExceptionHandling();
 
         $attributes = [

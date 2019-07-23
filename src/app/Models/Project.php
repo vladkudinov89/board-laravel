@@ -4,6 +4,7 @@ namespace App\Models;
 
 /**
  *  @property int $id
+ *  @property int $owner_id
  *  @property string $title
  *  @property string $description
  *

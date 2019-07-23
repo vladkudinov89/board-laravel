@@ -19,4 +19,9 @@ Route::get('/projects' , 'ProjectsController@index');
 
 Route::get('/projects/{id}' , 'ProjectsController@show');
 
-Route::post('/projects' , 'ProjectsController@store');
+Route::post('/projects' , 'ProjectsController@store')
+    ->middleware('auth');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
