@@ -83,4 +83,9 @@ class User extends AbstractBaseModel implements AuthenticatableContract, Authori
 
         $this->attributes['password'] = $value;
     }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class , 'owner_id');
+    }
 }
