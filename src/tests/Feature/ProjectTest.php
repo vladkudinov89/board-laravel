@@ -23,7 +23,7 @@ class ProjectTest extends AbstractFeatureTestCase
             ->assertRedirect('login');
     }
 
-    public function test_user_can_create_project()
+    public function test_auth_user_can_create_project()
     {
 
         $this->actingAs(factory(User::class)->create());
@@ -44,6 +44,33 @@ class ProjectTest extends AbstractFeatureTestCase
             ->assertSee($attributes['title']);
     }
 
+    public function test_only_auth_user_can_view_projects()
+    {
+        $this
+            ->get('/projects')
+            ->assertRedirect('login');
+    }
+
+    public function test_only_auth_user_can_view_single_project()
+    {
+        $project = factory('App\Models\Project')->create();
+
+        $this
+            ->get($project->path())
+            ->assertStatus(403);
+    }
+
+    public function test_an_auth_user_cannot_view_another_projects()
+    {
+        $this->be(factory('App\Models\User')->create());
+
+        $project = factory('App\Models\Project')->create();
+
+        $this->get($project->path())
+            ->assertStatus(403);
+    }
+
+
     public function test_a_project_requires_a_title()
     {
         $attributes = factory('App\Models\Project')->raw(['title' => '']);
@@ -62,13 +89,22 @@ class ProjectTest extends AbstractFeatureTestCase
 
     public function test_a_user_can_view_project()
     {
+        $this->be(factory('App\Models\User')->create());
+
         $this->withoutExceptionHandling();
 
-        $project = factory('App\Models\Project')->create();
+        $project = factory('App\Models\Project')->create(['owner_id' => auth()->id()]);
 
         $this->get($project->path())
             ->assertSee($project->title)
             ->assertSee($project->description);
+    }
+
+    public function test_it_belongs_to_an_owner()
+    {
+        $project = factory('App\Models\Project')->create();
+
+        $this->assertInstanceOf(User::class , $project->owner);
     }
 
 

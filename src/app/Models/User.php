@@ -17,6 +17,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
  * @property int         $id
  * @property string      $login
  * @property string      $display_name
+ * @property string      $email
  * @property string      $password Password hash
  * @property string      $remember_token
  * @property Carbon|null $created_at
@@ -42,6 +43,7 @@ class User extends AbstractBaseModel implements AuthenticatableContract, Authori
     protected $fillable = [
         'login',
         'display_name',
+        'email',
         'password',
     ];
 
