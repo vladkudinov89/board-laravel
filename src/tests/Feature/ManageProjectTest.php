@@ -8,7 +8,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProjectTest extends AbstractFeatureTestCase
+class ManageProjectTest extends AbstractFeatureTestCase
 {
     use WithFaker, RefreshDatabase, WithoutMiddleware;
 
@@ -105,6 +105,15 @@ class ProjectTest extends AbstractFeatureTestCase
         $project = factory('App\Models\Project')->create();
 
         $this->assertInstanceOf(User::class , $project->owner);
+    }
+
+    public function test_an_auth_user_can_create_project()
+    {
+        $this->be(factory('App\Models\User')->create());
+
+       $this->get('/projects/create')->assertStatus(200);
+
+
     }
 
 
