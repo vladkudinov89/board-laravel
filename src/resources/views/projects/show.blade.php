@@ -1,45 +1,17 @@
-@extends('layouts.app')
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Birdboard</title>
+</head>
+<body>
+<h1>Birdboard current view ID {{ $project->id  }}</h1>
 
-@section('content')
-<div class="flex items-center mb-3 py-4">
-    <header class="flex justify-between w-full items-end">
-        <p class="text-normal text-grey text-sm">
-            <a class="font-normal text-grey text-sm no-underline" href="/projects">
-                My Projects
-            </a>
-            / {{ $project->title }}
-        </p>
-        <a class="button p-2 px-5" href="/projects/create">
-            New Project
-        </a>
-    </header>
-</div>
-<main>
-    <div class="lg:flex -mx-3">
-        <div class="lg:w-3/4 px-3 mb-6">
-            <div class="mb-8">
-                <h2 class="text-lg text-grey font-normal mb-3">
-                    Tasks
-                </h2>
-                <div class="card mb-3">
-                    Lorem ipsum.
-                </div>
-                <div class="card mb-3">
-                    Lorem ipsum.
-                </div>
-            </div>
-            <div class="">
-                <h2 class="text-lg text-grey font-normal mb-3">
-                    General Notes
-                </h2>
-                <textarea class="card w-full" style="min-height: 200px">
-                    Lorem ipsum.
-                </textarea>
-            </div>
-        </div>
-        <div class="lg:w-1/4 px-3">
-            @include('projects.card')
-        </div>
-    </div>
-</main>
-@endsection
+<h2>Project title - {{$project->title}}</h2>
+<p>Project description - {{$project->description}}</p>
+
+</body>
+</html>
