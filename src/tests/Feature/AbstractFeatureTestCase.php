@@ -53,4 +53,9 @@ abstract class AbstractFeatureTestCase extends AbstractTestCase
 
         parent::tearDown();
     }
+
+    protected function signIn($user = null)
+    {
+        return $this->actingAs($user ?: factory('App\Models\User')->create());
+    }
 }

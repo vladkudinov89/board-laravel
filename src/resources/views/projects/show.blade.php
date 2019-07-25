@@ -22,10 +22,7 @@
                     Tasks
                 </h2>
                 <div class="card mb-3">
-                    Lorem ipsum.
-                </div>
-                <div class="card mb-3">
-                    Lorem ipsum.
+                    @include('projects.tasks', ['tasks' => $project->tasks])
                 </div>
             </div>
             <div class="">
