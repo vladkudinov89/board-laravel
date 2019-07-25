@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Task;
+
 /**
  * @property int $id
  * @property string $title
@@ -34,5 +36,15 @@ class Project extends AbstractBaseModel
     public function owner_id()
     {
         return $this->owner_id;
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    public function addTask($body)
+    {
+        return $this->tasks()->create(compact('body'));
     }
 }

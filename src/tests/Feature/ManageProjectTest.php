@@ -72,6 +72,8 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
     public function test_a_project_requires_a_title()
     {
+        $this->signIn();
+        
         $attributes = factory('App\Models\Project')->raw(['title' => '']);
 
         $this->post('/projects', $attributes)
@@ -97,13 +99,6 @@ class ManageProjectTest extends AbstractFeatureTestCase
         $this->get($project->path())
             ->assertSee($project->title)
             ->assertSee(str_limit($project->description ,  100,''));
-    }
-
-    public function test_it_belongs_to_an_owner()
-    {
-        $project = factory('App\Models\Project')->create();
-
-        $this->assertInstanceOf(User::class , $project->owner);
     }
 
     public function test_an_auth_user_can_create_project()

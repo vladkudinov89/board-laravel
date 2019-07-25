@@ -3,10 +3,10 @@
 namespace Tests\Unit;
 
 use App\Models\Project;
-use Tests\Feature\AbstractFeatureTestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Unit\AbstractUnitTestCase;
 
-class ProjectTest extends AbstractFeatureTestCase
+class ProjectTest extends AbstractUnitTestCase
 {
     use RefreshDatabase;
 
@@ -15,5 +15,23 @@ class ProjectTest extends AbstractFeatureTestCase
         $project = factory('App\Models\Project')->create();
 
         $this->assertEquals('/projects/' . $project->id , $project->path());
+    }
+
+     public function test_it_belongs_to_an_owner()
+    {
+        $project = factory(Project::class)->create();
+
+        $this->assertInstanceOf('App\Models\User', $project->owner);
+    }
+
+    public function test_it_can_add_task()
+    {
+        $project = factory('App\Models\Project')->create();
+
+        $task = $project->addTask('Test task');
+
+        $this->assertCount(1, $project->tasks);
+
+        $this->assertTrue($project->tasks->contains($task));
     }
 }

@@ -3,13 +3,13 @@
 namespace Tests\Unit;
 
 use App\Models\User;
-use Illuminate\Support\Collection;
-use Tests\Feature\AbstractFeatureTestCase;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Collection;
+use Tests\TestCase;
+use Tests\Unit\AbstractUnitTestCase;
 
-class UserTest extends AbstractFeatureTestCase
+class UserTest extends AbstractUnitTestCase
 {
     use RefreshDatabase;
 
