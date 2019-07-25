@@ -25,23 +25,22 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
     public function test_auth_user_can_create_project()
     {
-
-        $this->actingAs(factory(User::class)->create());
+        $this->signIn();
 
         $this->withoutExceptionHandling();
 
+        $this->get('/projects/create')->assertStatus(200);
+
         $attributes = [
             'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph,
+            'description' => $this->faker->paragraph
         ];
 
-        $this->post('/projects', $attributes)
-            ->assertRedirect('/projects');
+        $this->post('/projects', $attributes)->assertRedirect('/projects');
 
         $this->assertDatabaseHas('projects', $attributes);
 
-        $this->get('/projects')
-            ->assertSee($attributes['title']);
+        $this->get('/projects')->assertSee($attributes['title']);
     }
 
     public function test_only_auth_user_can_view_projects()
@@ -62,7 +61,7 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
     public function test_an_auth_user_cannot_view_another_projects()
     {
-        $this->be(factory('App\Models\User')->create());
+        $this->signIn();
 
         $project = factory('App\Models\Project')->create();
 
@@ -87,9 +86,9 @@ class ManageProjectTest extends AbstractFeatureTestCase
             ->assertSessionHasErrors('description');
     }
 
-    public function test_a_user_can_view_project()
+    public function test_a_user_can_view_own_project()
     {
-        $this->be(factory('App\Models\User')->create());
+        $this->signIn();
 
         $this->withoutExceptionHandling();
 
@@ -97,7 +96,7 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
         $this->get($project->path())
             ->assertSee($project->title)
-            ->assertSee($project->description);
+            ->assertSee(str_limit($project->description ,  100,''));
     }
 
     public function test_it_belongs_to_an_owner()
@@ -109,7 +108,7 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
     public function test_an_auth_user_can_create_project()
     {
-        $this->be(factory('App\Models\User')->create());
+        $this->signIn();
 
        $this->get('/projects/create')->assertStatus(200);
 
