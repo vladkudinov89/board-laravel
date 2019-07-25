@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\AbstractController;
 use App\Models\Project;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 
 class ProjectsController extends AbstractController
 {
@@ -44,11 +43,11 @@ class ProjectsController extends AbstractController
         ]);
 
         if (auth()->check()){
-            auth()->user()->projects()->create($attributes);
+            $project = auth()->user()->projects()->create($attributes);
         } else {
             return redirect('/login');
         }
 
-        return redirect('/projects');
+        return redirect($project->path());
     }
 }
