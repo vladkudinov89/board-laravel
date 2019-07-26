@@ -2,6 +2,7 @@
 
 namespace Feature;
 
+use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -21,6 +22,19 @@ class ProjectTasksTest extends AbstractFeatureTestCase
 
        $this->get($project->path())->assertSee('Test Task');
    }
+
+    public function test_only_a_owner_of_a_project_may_add_task()
+    {
+      $this->signIn();
+
+      $project = factory(Project::class)->create();
+
+      $this->post($project->path() . '/tasks', ['body' => 'Test task'])
+      ->assertStatus(403);
+
+      $this->assertDatabaseMissing('tasks' , ['body' => 'Test task']);
+
+    }
 
    public function test_a_task_require_body()
    {
