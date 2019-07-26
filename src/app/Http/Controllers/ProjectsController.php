@@ -24,7 +24,7 @@ class ProjectsController extends AbstractController
         $project = Project::find($id);
 
         if(auth()->id() !== $project->owner_id()){
-            return abort(403);
+            abort(403);
         }
 
         return view('projects.show' , compact('project'));
