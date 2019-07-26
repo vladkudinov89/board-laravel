@@ -16,11 +16,16 @@ class ProjectTasksTest extends AbstractFeatureTestCase
     {
         $this->signIn();
 
-        $project = factory('App\Models\Project')->create(['owner_id' => auth()->id()]);
+        $project = auth()->user()->projects()->create(
+            factory(Project::class)->raw()
+        );
 
-        $this->post($project->path() . '/tasks', ['body' => "Test Task"]);
+        $word = $this->faker->word;
 
-        $this->get($project->path())->assertSee('Test Task');
+        $this->post($project->path() . '/tasks', ['body' => $word]);
+
+        $this->get($project->path())
+            ->assertSee($word);
     }
 
     public function test_only_a_owner_of_a_project_may_add_task()
@@ -41,30 +46,27 @@ class ProjectTasksTest extends AbstractFeatureTestCase
         $this->signIn();
 
         $project = auth()->user()->projects()->create(
-            factory('App\Models\Project')->raw()
+            factory(Project::class)->raw()
         );
 
         $task = $project->addTask('test task');
 
         $this->patch($task->path(), [
-            'body' => 'task changed',
+            'body' => 'changed',
             'completed' => true
         ]);
 
         $this->assertDatabaseHas('tasks', [
-            'body' => 'task changed',
+            'body' => 'changed',
             'completed' => true
         ]);
-
     }
 
     public function test_only_owner_can_update_task_project()
     {
         $this->signIn();
 
-        $project = auth()->user()->projects()->create(
-            factory('App\Models\Project')->raw()
-        );
+        $project = factory('App\Models\Project')->create();
 
         $task = $project->addTask('test task');
 
