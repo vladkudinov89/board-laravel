@@ -23,7 +23,7 @@ class LoginController extends AbstractController
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/projects';
 
     /**
      * Create a new controller instance.
