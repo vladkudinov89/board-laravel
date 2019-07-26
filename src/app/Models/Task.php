@@ -19,6 +19,8 @@ class Task extends AbstractBaseModel
 
     protected $guarded = [];
 
+    protected $touches = ['project'];
+
     public function project()
     {
         return $this->belongsTo(Project::class);
