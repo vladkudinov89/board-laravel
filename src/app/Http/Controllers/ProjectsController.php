@@ -43,11 +43,11 @@ class ProjectsController extends AbstractController
         ]);
 
         if (auth()->check()){
-            auth()->user()->projects()->create($attributes);
+            $project = auth()->user()->projects()->create($attributes);
         } else {
             return redirect('/login');
         }
 
-        return redirect('/projects');
+        return redirect($project->path());
     }
 }
