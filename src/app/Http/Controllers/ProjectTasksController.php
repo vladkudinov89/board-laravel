@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\AbstractController;
-use App\Models\Project;
-use Illuminate\Http\Request;
+use App\Models\{Project , Task};
 
 class ProjectTasksController extends AbstractController
 {
@@ -20,6 +18,24 @@ class ProjectTasksController extends AbstractController
         ]);
         
         $project->addTask(request('body'));
+
+        return redirect($project->path());
+    }
+
+    public function update(Project $project , Task $task)
+    {
+        if (auth()->user()->isNot($project->owner)) {
+            abort(403);
+        }
+
+        request()->validate([
+            'body' => 'required'
+        ]);
+
+        $task->update([
+            'body' => request('body'),
+            'completed' => request()->has('completed')
+        ]);
 
         return redirect($project->path());
     }
