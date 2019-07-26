@@ -22,7 +22,7 @@
                     Tasks
                 </h2>
 
-                @include('projects.tasks', ['tasks' => $project->tasks])   
+                @include('projects.tasks', ['project' => $project ,'tasks' => $project->tasks])   
                              
             </div>
             <div class="">

@@ -7,12 +7,14 @@ use App\Models\Project;
 /**
  * @property string $body
  * @property int $project_id
+ * @property boolean $completed
  */
 class Task extends AbstractBaseModel
 {
-     protected $fillable = [
+    protected $fillable = [
         'body',
-        'project_id'
+        'project_id',
+        'completed'
     ];
 
     protected $guarded = [];
@@ -20,5 +22,10 @@ class Task extends AbstractBaseModel
     public function project()
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function path()
+    {
+        return "/projects/{$this->project->id}/tasks/{$this->id}";
     }
 }
