@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\AbstractController;
 use App\Models\Project;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 
 class ProjectsController extends AbstractController
@@ -19,13 +20,16 @@ class ProjectsController extends AbstractController
         return view('projects.index',  compact('projects'));
     }
 
+    /**
+     * @param int $id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws AuthorizationException
+     */
     public function show(int $id)
     {
         $project = Project::find($id);
 
-        if(auth()->id() !== $project->owner_id()){
-            abort(403);
-        }
+            $this->authorize('update', $project);
 
         return view('projects.show' , compact('project'));
     }
@@ -40,6 +44,7 @@ class ProjectsController extends AbstractController
         $attributes = $request->validate([
             'title' => 'required',
             'description' => 'required',
+            'notes' => 'min:3'
         ]);
 
         if (auth()->check()){
@@ -47,6 +52,28 @@ class ProjectsController extends AbstractController
         } else {
             return redirect('/login');
         }
+
+        return redirect($project->path());
+    }
+
+    /**
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws AuthorizationException
+     */
+    public function update(int $id)
+    {
+        $project = Project::find($id);
+
+        request()->validate([
+            'notes' => 'required'
+        ]);
+
+        $this->authorize('update', $project);
+
+        $project->update([
+            'notes' => request('notes')
+        ]);
 
         return redirect($project->path());
     }

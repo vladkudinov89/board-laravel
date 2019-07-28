@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Tests\TestCase;
 
 class ManageProjectTest extends AbstractFeatureTestCase
 {
@@ -34,7 +33,8 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
         $attributes = [
             'title' => $this->faker->sentence,
-            'description' => $this->faker->paragraph
+            'description' => $this->faker->sentence,
+            'notes' => 'General notes here.'
         ];
 
         $response = $this->post('/projects', $attributes);
@@ -45,14 +45,47 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
         $this->assertDatabaseHas('projects', $attributes);
 
-        $this->get('/projects')->assertSee($attributes['title']);
+        $this->get($project->path())
+            ->assertSee($attributes['title'])
+            ->assertSee($attributes['description'])
+            ->assertSee($attributes['notes']);
     }
+
+    public function test_a_user_can_update_a_project()
+    {
+        $this->signIn();
+
+        $this->withoutExceptionHandling();
+
+        $project = factory('App\Models\Project')->create(['owner_id' => auth()->id()]);
+
+        $this->patch($project->path(), [
+            'notes' => 'changed notes.'
+        ]);
+
+        $this
+            ->assertDatabaseHas('projects', [
+                'notes' => 'changed notes.'
+        ]);
+    }
+
+    public function test_an_unauth_user_cannot_update_project()
+    {
+        $project = factory('App\Models\Project')->create();
+
+        $this
+            ->patch($project->path(), [
+                'notes' => 'changed'
+            ])
+            ->assertStatus(403);
+    }
+
 
     public function test_only_auth_user_can_view_projects()
     {
         $this
             ->get('/projects')
-            ->assertRedirect('login');
+            ->assertRedirect('/login');
     }
 
     public function test_only_auth_user_can_view_single_project()
@@ -78,7 +111,7 @@ class ManageProjectTest extends AbstractFeatureTestCase
     public function test_a_project_requires_a_title()
     {
         $this->signIn();
-        
+
         $attributes = factory('App\Models\Project')->raw(['title' => '']);
 
         $this->post('/projects', $attributes)
@@ -97,13 +130,11 @@ class ManageProjectTest extends AbstractFeatureTestCase
     {
         $this->signIn();
 
-        $this->withoutExceptionHandling();
-
         $project = factory('App\Models\Project')->create(['owner_id' => auth()->id()]);
 
         $this->get($project->path())
             ->assertSee($project->title)
-            ->assertSee(str_limit($project->description ,  100,''));
+            ->assertSee($project->description);
     }
 
     public function test_an_auth_user_can_create_project()
