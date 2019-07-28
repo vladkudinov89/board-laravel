@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Facades\Tests\Setup\ProjectFactory;
 use Tests\Feature\AbstractFeatureTestCase;
 
 class ProjectTasksTest extends AbstractFeatureTestCase
@@ -14,15 +15,13 @@ class ProjectTasksTest extends AbstractFeatureTestCase
 
     public function test_a_project_can_have_tasks()
     {
-        $this->signIn();
-
-        $project = auth()->user()->projects()->create(
-            factory(Project::class)->raw()
-        );
+        $project = ProjectFactory::withTasks(1)->create();
 
         $word = $this->faker->word;
 
-        $this->post($project->path() . '/tasks', ['body' => $word]);
+        $this
+            ->actingAs($project->owner)
+            ->post($project->path() . '/tasks', ['body' => $word]);
 
         $this->get($project->path())
             ->assertSee($word);
@@ -43,15 +42,11 @@ class ProjectTasksTest extends AbstractFeatureTestCase
 
     public function test_a_task_can_be_updated()
     {
-        $this->signIn();
+        $project = ProjectFactory::withTasks(1)->create();
 
-        $project = auth()->user()->projects()->create(
-            factory(Project::class)->raw()
-        );
-
-        $task = $project->addTask('test task');
-
-        $this->patch($task->path(), [
+        $this
+            ->actingAs($project->owner)
+            ->patch($project->tasks[0]->path(), [
             'body' => 'changed',
             'completed' => true
         ]);
@@ -66,11 +61,10 @@ class ProjectTasksTest extends AbstractFeatureTestCase
     {
         $this->signIn();
 
-        $project = factory('App\Models\Project')->create();
+        $project = ProjectFactory::withTasks(1)->create();
 
-        $task = $project->addTask('test task');
-
-        $this->patch($task->path(), [
+        $this
+            ->patch($project->tasks[0]->path(), [
             'body' => 'task changed'
         ])
             ->assertStatus(403);
@@ -83,15 +77,13 @@ class ProjectTasksTest extends AbstractFeatureTestCase
 
     public function test_a_task_require_body()
     {
-        $this->signIn();
-
-        $project = auth()->user()->projects()->create(
-            factory('App\Models\Project')->raw()
-        );
+        $project = ProjectFactory::create();
 
         $attributes = factory(Task::class)->raw(['body' => '']);
 
-        $this->post($project->path() . '/tasks', $attributes)
+        $this
+            ->actingAs($project->owner)
+            ->post($project->path() . '/tasks', $attributes)
             ->assertSessionHasErrors('body');
     }
 

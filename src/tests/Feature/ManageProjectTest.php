@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Project;
 use App\Models\User;
+use Facades\Tests\Setup\ProjectFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
@@ -14,8 +15,6 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
     public function test_only_auth_users_can_create_project()
     {
-        $this->withoutExceptionHandling();
-
         $attributes = factory('App\Models\Project')->raw();
 
         $this
@@ -26,8 +25,6 @@ class ManageProjectTest extends AbstractFeatureTestCase
     public function test_auth_user_can_create_project()
     {
         $this->signIn();
-
-        $this->withoutExceptionHandling();
 
         $this->get('/projects/create')->assertStatus(200);
 
@@ -55,11 +52,11 @@ class ManageProjectTest extends AbstractFeatureTestCase
     {
         $this->signIn();
 
-        $this->withoutExceptionHandling();
+        $project = ProjectFactory::create();
 
-        $project = factory('App\Models\Project')->create(['owner_id' => auth()->id()]);
-
-        $this->patch($project->path(), [
+        $this
+            ->actingAs($project->owner)
+            ->patch($project->path(), [
             'notes' => 'changed notes.'
         ]);
 
@@ -71,7 +68,7 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
     public function test_an_unauth_user_cannot_update_project()
     {
-        $project = factory('App\Models\Project')->create();
+        $project = ProjectFactory::create();
 
         $this
             ->patch($project->path(), [
@@ -90,7 +87,7 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
     public function test_only_auth_user_can_view_single_project()
     {
-        $project = factory('App\Models\Project')->create();
+        $project = ProjectFactory::create();
 
         $this
             ->get($project->path())
@@ -99,11 +96,10 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
     public function test_an_auth_user_cannot_view_another_projects()
     {
-        $this->signIn();
+        $project = ProjectFactory::create();
 
-        $project = factory('App\Models\Project')->create();
-
-        $this->get($project->path())
+        $this
+            ->get($project->path())
             ->assertStatus(403);
     }
 
