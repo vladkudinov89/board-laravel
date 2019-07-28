@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Unit\AbstractUnitTestCase;
 
@@ -21,7 +22,7 @@ class ProjectTest extends AbstractUnitTestCase
     {
         $project = factory(Project::class)->create();
 
-        $this->assertInstanceOf('App\Models\User', $project->owner);
+        $this->assertInstanceOf(User::class, $project->owner);
     }
 
     public function test_it_can_add_task()
