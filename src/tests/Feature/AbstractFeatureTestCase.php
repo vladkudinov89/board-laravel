@@ -9,6 +9,10 @@ abstract class AbstractFeatureTestCase extends AbstractTestCase
 {
     protected function signIn($user = null)
     {
-        return $this->actingAs($user ?: factory(User::class)->create());
+        $user  = $user ?: factory(User::class)->create();
+
+        $this->actingAs($user);
+
+        return $user;
     }
 }
