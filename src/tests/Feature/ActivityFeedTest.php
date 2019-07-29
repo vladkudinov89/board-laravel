@@ -64,11 +64,11 @@ class ActivityFeedTest extends AbstractFeatureTestCase
         $this->assertDatabaseHas('activities', [
                 'project_id' => $project->id,
                 'description' => 'completed_task'
-        ]);
+    ]);
 
         $this->assertCount(3 , $project->activity);
 
-//        $this->assertEquals('completed_task' , $project->activity->last()->description);
+       $this->assertEquals('completed_task' , $project->activity->last()->description);
     }
 
 

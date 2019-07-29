@@ -47,8 +47,8 @@ class ProjectTasksTest extends AbstractFeatureTestCase
         $this
             ->actingAs($project->owner)
             ->patch($project->tasks[0]->path(), [
-            'body' => 'changed',
-            'completed' => true
+                'body' => 'changed',
+                'completed' => true
         ]);
 
         $this->assertDatabaseHas('tasks', [
