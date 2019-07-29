@@ -2,4 +2,4 @@
 
 APP_DIR="${APP_DIR:-/app}";
 
-php "$APP_DIR/artisan" migrate:fresh --seed
+php "$APP_DIR/vendor/bin/phpunit" --filter "$@"
