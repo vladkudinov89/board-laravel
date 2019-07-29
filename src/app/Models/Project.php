@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Activity;
 use App\Models\Task;
 
 /**
@@ -50,5 +51,18 @@ class Project extends AbstractBaseModel
     public function addTask($body)
     {
         return $this->tasks()->create(compact('body'));
+    }
+
+    public function activity()
+    {
+        return $this->hasMany(Activity::class);
+    }
+
+    public function recordActivity(string $type)
+    {
+        Activity::create([
+            'project_id' => $this->id,
+            'description' => $type
+        ]);
     }
 }

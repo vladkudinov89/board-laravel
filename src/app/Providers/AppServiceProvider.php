@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Project;
+use App\Observers\ProjectObserver;
 use Illuminate\Support\ServiceProvider;
 use App\Services\AvatarGenerator\AvatarGenerator;
 use App\Support\Contracts\AvatarGeneratorContract;
@@ -15,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+       Project::observe(ProjectObserver::class);
     }
 
     /**
