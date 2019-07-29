@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Task;
+use App\Models\Activity;
 
 /**
  * App\Models\Project
@@ -50,5 +51,10 @@ class Project extends AbstractBaseModel
     public function addTask($body)
     {
         return $this->tasks()->create(compact('body'));
+    }
+
+    public function activity()
+    {
+        return $this->hasMany(Activity::class);
     }
 }
