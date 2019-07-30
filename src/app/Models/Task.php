@@ -25,6 +25,10 @@ class Task extends AbstractBaseModel
         'completed'
     ];
 
+    protected $casts = [
+        'completed' => 'boolean'
+    ];
+
     protected $guarded = [];
 
     protected $touches = ['project'];
@@ -40,8 +44,14 @@ class Task extends AbstractBaseModel
         static::updated(function ($task){
             if( $task->compeleted === false) return;
 
-            $task->project->recordActivity('completed_task');
         });
+    }
+
+    public function complete()
+    {
+       $this->update(['completed' => true]);
+
+       $this->project->recordActivity('completed_task');
     }
 
     public function project()
