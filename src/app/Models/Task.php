@@ -33,20 +33,6 @@ class Task extends AbstractBaseModel
 
     protected $touches = ['project'];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::created(function ($task){
-            $task->project->recordActivity('created_task');
-        });
-
-        static::updated(function ($task){
-            if( $task->compeleted === false) return;
-
-        });
-    }
-
     public function complete()
     {
        $this->update(['completed' => true]);
@@ -57,6 +43,8 @@ class Task extends AbstractBaseModel
     public function incomplete()
     {
         $this->update(['completed' => false]);
+
+        $this->project->recordActivity('incompleted_task');
     }
 
     public function project()

@@ -55,7 +55,7 @@ class ManageProjectTest extends AbstractFeatureTestCase
         $project = ProjectFactory::create();
 
         $this
-            ->actingAs($project->owner)
+            ->actingAs($project->owner ?? factory(User::class)->create())
             ->patch($project->path(), [
             'notes' => 'changed notes.'
         ]);
