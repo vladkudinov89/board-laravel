@@ -32,7 +32,21 @@ class TaskTest extends AbstractUnitTestCase
         $this->assertFalse($task->completed);
 
         $task->complete();
-        
+
         $this->assertTrue($task->fresh()->completed);
     }
+
+    /** @test */
+    public function it_can_incompleted()
+    {
+        $task = factory(Task::class)->create(['completed' => true]);
+
+        $this->assertTrue($task->completed);
+
+        $task->incomplete();
+
+        $this->assertFalse($task->completed);
+    }
+
+
 }

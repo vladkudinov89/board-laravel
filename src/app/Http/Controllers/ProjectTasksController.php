@@ -32,8 +32,10 @@ class ProjectTasksController extends AbstractController
             'body' => request('body')
         ]);
 
-        if(request()->has('completed')){
+        if(request('completed')){
             $task->complete();
+        } else {
+            $task->incomplete();
         }
 
         return redirect($project->path());
