@@ -58,11 +58,8 @@ class Project extends AbstractBaseModel
         return $this->hasMany(Activity::class);
     }
 
-    public function recordActivity(string $type)
+    public function recordActivity(string $description)
     {
-        Activity::create([
-            'project_id' => $this->id,
-            'description' => $type
-        ]);
+        $this->activity()->create(compact('description'));
     }
 }
