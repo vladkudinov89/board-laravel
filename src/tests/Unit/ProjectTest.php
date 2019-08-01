@@ -19,13 +19,6 @@ class ProjectTest extends AbstractUnitTestCase
         $this->assertEquals('/projects/' . $project->id , $project->path());
     }
 
-     public function test_it_belongs_to_an_owner()
-    {
-        $project = ProjectFactory::create();
-
-        $this->assertInstanceOf(User::class, $project->owner);
-    }
-
     public function test_it_can_add_task()
     {
         $project = factory('App\Models\Project')->create();

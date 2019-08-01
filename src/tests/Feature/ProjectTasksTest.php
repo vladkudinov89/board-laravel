@@ -16,6 +16,8 @@ class ProjectTasksTest extends AbstractFeatureTestCase
 
     public function test_a_project_can_have_tasks()
     {
+        $this->signIn();
+
         $project = ProjectFactory::withTasks(1)->create();
 
         $word = $this->faker->word;
@@ -24,7 +26,8 @@ class ProjectTasksTest extends AbstractFeatureTestCase
             ->actingAs($project->owner ?? factory(User::class)->create())
             ->post($project->path() . '/tasks', ['body' => $word]);
 
-        $this->get($project->path())
+        $this
+            ->get($project->path())
             ->assertSee($word);
     }
 

@@ -19,7 +19,7 @@ class TriggerActivityTest extends AbstractFeatureTestCase
 
         $this->assertCount(1 , $project->activity);
 
-        $this->assertEquals('created' , $project->activity[0]->description);
+        $this->assertEquals('created_project' , $project->activity[0]->description);
     }
 
     /** @test */
@@ -35,7 +35,7 @@ class TriggerActivityTest extends AbstractFeatureTestCase
 
         tap($project->activity->last() , function ($activity) use ($originalTitle) {
 
-            $this->assertEquals('updated', $activity->description);
+            $this->assertEquals('updated_project', $activity->description);
 
             $expected = [
               'before' => ['title' => $originalTitle],
