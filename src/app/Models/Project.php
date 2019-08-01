@@ -13,7 +13,7 @@ use App\Models\Task;
  * @property string $description
  * @property int $owner_id
  * @property string $notes
- * @property-read \App\Models\User $owner
+ * @property-read User $owner
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Task[] $tasks
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Project newQuery()
@@ -24,14 +24,9 @@ class Project extends AbstractBaseModel
 {
     protected $table = 'projects';
 
-    protected $fillable = [
-        'title',
-        'description',
-        'owner_id',
-        'notes'
-    ];
-
     protected $guarded = [];
+
+    public $old = [];
 
     public function path()
     {
@@ -60,6 +55,19 @@ class Project extends AbstractBaseModel
 
     public function recordActivity(string $description)
     {
-        $this->activity()->create(compact('description'));
+        $this->activity()->create([
+            'description' => $description,
+            'changes' => $this->activityChanges($description)
+        ]);
+    }
+
+    public function activityChanges($description)
+    {
+        if ($description == 'updated'){
+            return [
+                'before' => array_except(array_diff($this->old, $this->getAttributes()) , 'updated_at'),
+                'after' => array_except($this->getChanges() , 'updated_at')
+            ];
+        }
     }
 }
