@@ -13,10 +13,8 @@ class Activity extends AbstractBaseModel
 {
     protected $guarded = [];
 
-    protected $fillable = [
-        'project_id',
-        'subject',
-        'description'
+    protected $casts = [
+        'changes' => 'array'
     ];
 
     public function subject()

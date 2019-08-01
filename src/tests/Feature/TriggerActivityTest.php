@@ -19,7 +19,7 @@ class TriggerActivityTest extends AbstractFeatureTestCase
 
         $this->assertCount(1 , $project->activity);
 
-        $this->assertEquals('created' , $project->activity[0]->description);
+        $this->assertEquals('created_project' , $project->activity[0]->description);
     }
 
     /** @test */
@@ -27,11 +27,23 @@ class TriggerActivityTest extends AbstractFeatureTestCase
     {
         $project  = ProjectFactory::withTasks(0)->create();
 
+        $originalTitle = $project->title;
+
         $project->update(['title' => 'updated']);
 
         $this->assertCount(2 , $project->activity);
 
-        $this->assertEquals('updated' , $project->activity->last()->description);
+        tap($project->activity->last() , function ($activity) use ($originalTitle) {
+
+            $this->assertEquals('updated_project', $activity->description);
+
+            $expected = [
+              'before' => ['title' => $originalTitle],
+              'after' =>  ['title' => 'updated']
+            ];
+
+            $this->assertEquals($expected , $activity->changes);
+        });
     }
 
     /** @test */
@@ -78,8 +90,6 @@ class TriggerActivityTest extends AbstractFeatureTestCase
             $this->assertEquals('completed_task' , $activity->description);
             $this->assertInstanceOf(Task::class , $activity->subject);
         });
-
-//       $this->assertEquals('completed_task' , $project->activity->last()->description);
     }
 
     /** @test */
