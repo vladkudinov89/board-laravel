@@ -15,6 +15,12 @@ class Activity extends AbstractBaseModel
 
     protected $fillable = [
         'project_id',
+        'subject',
         'description'
     ];
+
+    public function subject()
+    {
+        return $this->morphTo();
+    }
 }

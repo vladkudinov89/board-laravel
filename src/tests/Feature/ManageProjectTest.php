@@ -42,7 +42,9 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
         $this->assertDatabaseHas('projects', $attributes);
 
-        $this->get($project->path())
+        $this
+            ->actingAs($project->owner ?? factory(User::class)->create())
+            ->get($project->path())
             ->assertSee($attributes['title'])
             ->assertSee($attributes['description'])
             ->assertSee($attributes['notes']);
@@ -55,8 +57,8 @@ class ManageProjectTest extends AbstractFeatureTestCase
         $project = ProjectFactory::create();
 
         $this
-            ->actingAs($project->owner)
-            ->patch($project->path(), [
+        ->actingAs($project->owner ?? factory(User::class)->create())
+        ->patch($project->path(), [
             'notes' => 'changed notes.'
         ]);
 
@@ -128,7 +130,9 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
         $project = factory('App\Models\Project')->create(['owner_id' => auth()->id()]);
 
-        $this->get($project->path())
+        $this
+            ->actingAs($project->owner ?? factory(User::class)->create())
+            ->get($project->path())
             ->assertSee($project->title)
             ->assertSee($project->description);
     }
@@ -139,8 +143,6 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
        $this->get('/projects/create')->assertStatus(200);
 
-
     }
-
 
 }

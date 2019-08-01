@@ -4,6 +4,7 @@ namespace Tests\Unit;
 
 use App\Models\Project;
 use App\Models\User;
+use Facades\Tests\Setup\ProjectFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Unit\AbstractUnitTestCase;
 
@@ -20,7 +21,7 @@ class ProjectTest extends AbstractUnitTestCase
 
      public function test_it_belongs_to_an_owner()
     {
-        $project = factory(Project::class)->create();
+        $project = ProjectFactory::create();
 
         $this->assertInstanceOf(User::class, $project->owner);
     }

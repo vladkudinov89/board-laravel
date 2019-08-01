@@ -4,6 +4,7 @@ namespace Feature;
 
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Facades\Tests\Setup\ProjectFactory;
@@ -20,7 +21,7 @@ class ProjectTasksTest extends AbstractFeatureTestCase
         $word = $this->faker->word;
 
         $this
-            ->actingAs($project->owner)
+            ->actingAs($project->owner ?? factory(User::class)->create())
             ->post($project->path() . '/tasks', ['body' => $word]);
 
         $this->get($project->path())
@@ -45,7 +46,7 @@ class ProjectTasksTest extends AbstractFeatureTestCase
         $project = ProjectFactory::withTasks(1)->create();
 
         $this
-            ->actingAs($project->owner)
+            ->actingAs($project->owner ?? factory(User::class)->create())
             ->patch($project->tasks[0]->path(), [
                 'body' => 'changed'
         ]);
@@ -60,7 +61,7 @@ class ProjectTasksTest extends AbstractFeatureTestCase
         $project = ProjectFactory::withTasks(1)->create();
 
         $this
-            ->actingAs($project->owner)
+            ->actingAs($project->owner ?? factory(User::class)->create())
             ->patch($project->tasks[0]->path(), [
                 'body' => 'changed',
                 'completed' => true
@@ -77,14 +78,14 @@ class ProjectTasksTest extends AbstractFeatureTestCase
         $project = ProjectFactory::withTasks(1)->create();
 
         $this
-            ->actingAs($project->owner)
+            ->actingAs($project->owner ?? factory(User::class)->create())
             ->patch($project->tasks[0]->path(), [
                 'body' => 'changed',
                 'completed' => true
             ]);
 
         $this
-            ->actingAs($project->owner)
+            ->actingAs($project->owner ?? factory(User::class)->create())
             ->patch($project->tasks[0]->path(), [
                 'body' => 'changed',
                 'completed' => false
@@ -121,7 +122,7 @@ class ProjectTasksTest extends AbstractFeatureTestCase
         $attributes = factory(Task::class)->raw(['body' => '']);
 
         $this
-            ->actingAs($project->owner)
+            ->actingAs($project->owner ?? factory(User::class)->create())
             ->post($project->path() . '/tasks', $attributes)
             ->assertSessionHasErrors('body');
     }
