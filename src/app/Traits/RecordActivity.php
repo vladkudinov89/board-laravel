@@ -47,13 +47,14 @@ trait RecordActivity
 
     public function recordActivity(string $description)
     {
+//        dump(($this->project ?? $this)->owner->id);
         $this->activity()->create([
+            'user_id' => auth()->id() ?: ($this->project ?? $this)->owner->id,
             'description' => $description,
-            'project_id' => class_basename($this) === 'App\Models\Project' ? $this->id : $this->project_id,
+            'project_id' => class_basename($this) === 'Project' ? $this->id : $this->project_id,
             'changes' => $this->activityChanges()
         ]);
     }
-
 
     public function activity()
     {

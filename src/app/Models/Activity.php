@@ -21,4 +21,9 @@ class Activity extends AbstractBaseModel
     {
         return $this->morphTo();
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

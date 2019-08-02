@@ -21,6 +21,8 @@ class ProjectTest extends AbstractUnitTestCase
 
     public function test_it_can_add_task()
     {
+        $this->signIn();
+
         $project = factory('App\Models\Project')->create();
 
         $task = $project->addTask('Test task');
