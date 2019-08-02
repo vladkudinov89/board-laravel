@@ -91,7 +91,7 @@
         <ul class="users-list">
           @foreach($users as $user)
             @if($user instanceof \App\Models\User)
-              <li>{{ $user->login }}</li>
+              <li>{{ $user->name }}</li>
             @endif
           @endforeach
         </ul>
