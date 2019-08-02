@@ -53,4 +53,14 @@ class Project extends AbstractBaseModel
     {
         return $this->hasMany(Activity::class)->latest();
     }
+
+    public function invite(User $user)
+    {
+        $this->members()->attach($user);
+    }
+
+    public function members()
+    {
+        return $this->belongsToMany(User::class , 'project_members');
+    }
 }
