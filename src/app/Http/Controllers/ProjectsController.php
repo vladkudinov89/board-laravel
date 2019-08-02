@@ -77,4 +77,21 @@ class ProjectsController extends AbstractController
 
         return redirect($project->path());
     }
+
+    public function destroy(int $id)
+    {
+        $project = Project::find($id);
+
+        if (auth()->check()){
+
+            $this->authorize('update', $project);
+
+            $project->delete();
+
+        } else {
+            return redirect('/login');
+        }
+
+        return redirect('projects');
+    }
 }

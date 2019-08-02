@@ -42,14 +42,14 @@ trait RecordActivity
             return static::$recordableEvents;
         }
 
-        return ['created', 'updated', 'deleted'];
+        return ['created', 'updated'];
     }
 
     public function recordActivity(string $description)
     {
 //        dump(($this->project ?? $this)->owner->id);
         $this->activity()->create([
-            'user_id' => auth()->id() ?: ($this->project ?? $this)->owner->id,
+            'user_id' => ($this->project ?? $this)->owner_id,
             'description' => $description,
             'project_id' => class_basename($this) === 'Project' ? $this->id : $this->project_id,
             'changes' => $this->activityChanges()

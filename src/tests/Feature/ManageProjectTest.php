@@ -15,6 +15,7 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
     public function test_only_auth_users_can_create_project()
     {
+        $this->withoutExceptionHandling();
         $attributes = factory('App\Models\Project')->raw();
 
         $this
@@ -24,7 +25,7 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
     public function test_auth_user_can_create_project()
     {
-        $this->signIn();
+        $user = $this->signIn();
 
         $this->get('/projects/create')->assertStatus(200);
 
@@ -42,13 +43,46 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
         $this->assertDatabaseHas('projects', $attributes);
 
-//        $this
-//            ->actingAs($project->owner ?? factory(User::class)->create())
-//            ->get($project->path())
-//            ->assertSee($attributes['title'])
-//            ->assertSee($attributes['description'])
-//            ->assertSee($attributes['notes']);
+        $this
+            ->actingAs($project->owner ?? $user)
+            ->get($project->path())
+            ->assertSee($attributes['title'])
+            ->assertSee($attributes['description'])
+            ->assertSee($attributes['notes']);
     }
+
+    /** @test */
+    public function unauth_user_cannot_delete_project()
+    {
+        $project = ProjectFactory::create();
+
+        $this
+            ->delete($project->path())
+            ->assertRedirect('/login');
+
+        $this->signIn();
+
+        $this
+            ->delete($project->path())
+            ->assertStatus(403);
+    }
+
+
+    /** @test */
+    public function user_can_delete_own_project()
+    {
+        $user = $this->signIn();
+
+        $project = ProjectFactory::create();
+
+        $this
+            ->actingAs($project->owner ?? $user)
+            ->delete($project->path())
+            ->assertRedirect('/projects');
+
+        $this->assertDatabaseMissing('projects' , $project->only('id'));
+    }
+
 
     public function test_a_user_can_update_a_project()
     {

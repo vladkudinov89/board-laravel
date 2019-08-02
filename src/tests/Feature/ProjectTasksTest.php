@@ -16,14 +16,14 @@ class ProjectTasksTest extends AbstractFeatureTestCase
 
     public function test_a_project_can_have_tasks()
     {
-        $this->signIn();
+        $user = $this->signIn();
 
         $project = ProjectFactory::withTasks(1)->create();
 
         $word = $this->faker->word;
 
         $this
-            ->actingAs($project->owner ?? factory(User::class)->create())
+            ->actingAs($project->owner ?? $user)
             ->post($project->path() . '/tasks', ['body' => $word]);
 
         $this
@@ -46,10 +46,12 @@ class ProjectTasksTest extends AbstractFeatureTestCase
 
     public function test_a_task_can_be_updated()
     {
+        $user = $this->signIn();
+
         $project = ProjectFactory::withTasks(1)->create();
 
         $this
-            ->actingAs($project->owner ?? factory(User::class)->create())
+            ->actingAs($project->owner ?? $user)
             ->patch($project->tasks[0]->path(), [
                 'body' => 'changed'
         ]);
@@ -61,10 +63,12 @@ class ProjectTasksTest extends AbstractFeatureTestCase
 
     public function test_a_task_can_be_completed()
     {
+        $user = $this->signIn();
+
         $project = ProjectFactory::withTasks(1)->create();
 
         $this
-            ->actingAs($project->owner ?? factory(User::class)->create())
+            ->actingAs($project->owner ?? $user)
             ->patch($project->tasks[0]->path(), [
                 'body' => 'changed',
                 'completed' => true

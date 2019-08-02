@@ -17,9 +17,9 @@ class ActivityTest extends AbstractUnitTestCase
     {
         $user = $this->signIn();
 
-        $project = ProjectFactory::ownedBy($user)->create();
+        $project = factory(Project::class)->create(['owner_id' => $user->id]);
 
-        $this->assertEquals($user->id , $project->activity->first()->user->id);
+        $this->assertEquals($user->id , $project->activity->first()->user_id);
     }
 
 }
