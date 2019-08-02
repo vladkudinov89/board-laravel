@@ -53,12 +53,6 @@ class User extends AbstractBaseModel implements AuthenticatableContract, Authori
      *
      * @var array
      */
-    protected $fillable = [
-        'login',
-        'display_name',
-        'email',
-        'password',
-    ];
 
     /**
      * The attributes that should be hidden for arrays.

@@ -95,8 +95,10 @@ class TriggerActivityTest extends AbstractFeatureTestCase
     /** @test */
     public function incompleted_a_new_task()
     {
-        $project  = ProjectFactory::withTasks(1)->create();
+        $this->signIn();
 
+        $project  = ProjectFactory::withTasks(1)->create();
+//        dd($project->owner);
         $this
             ->actingAs($project->owner)
             ->patch($project->tasks->last()->path() , [

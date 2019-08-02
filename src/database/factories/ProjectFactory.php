@@ -8,7 +8,6 @@ $factory->define(Project::class, function (Faker $faker) {
     return [
         'title' => $this->faker->sentence(4),
         'description' => $this->faker->text($maxNbChars = 100),
-        'owner_id' => factory(User::class),
-        'notes' => $this->faker->sentence(1),
+        'owner_id' => factory(User::class)
     ];
 });
