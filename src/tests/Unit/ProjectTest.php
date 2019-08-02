@@ -31,4 +31,15 @@ class ProjectTest extends AbstractUnitTestCase
 
         $this->assertTrue($project->tasks->contains($task));
     }
+
+    /** @test */
+    public function it_can_invite_user()
+    {
+        $project = factory('App\Models\Project')->create();
+
+        $project->invite($newUser = factory(User::class)->create());
+
+        $this->assertTrue($project->members->contains($newUser));
+    }
+
 }
