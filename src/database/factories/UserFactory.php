@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Factory as EloquentFactory;
 /** @var EloquentFactory $factory */
 $factory->define(User::class, function (Faker $faker) {
     return [
-        'login'          => $faker->unique()->userName,
         'name'   => $faker->unique()->name,
         'email'          => $faker->unique()->email,
         'password'       => 'secret',
