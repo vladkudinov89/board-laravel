@@ -52,6 +52,20 @@ class ManageProjectTest extends AbstractFeatureTestCase
     }
 
     /** @test */
+    public function a_user_can_see_all_proj_they_have_been_invited_to_on_their_dashboard()
+    {
+        $user = $this->signIn();
+
+        $project = ProjectFactory::create();
+
+        $project->invite($user);
+
+        $this->get('/projects')
+            ->assertSee($project->title);
+    }
+
+
+    /** @test */
     public function unauth_user_cannot_delete_project()
     {
         $project = ProjectFactory::create();

@@ -12,7 +12,7 @@ class ProjectsController extends AbstractController
     public function index()
     {
         if (auth()->check()){
-            $projects = auth()->user()->projects;
+            $projects = auth()->user()->accessibleProjects();
         } else {
             return redirect('/login');
         }
