@@ -15,7 +15,6 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
     public function test_only_auth_users_can_create_project()
     {
-        $this->withoutExceptionHandling();
         $attributes = factory('App\Models\Project')->raw();
 
         $this
@@ -100,12 +99,12 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
     public function test_a_user_can_update_a_project()
     {
-        $this->signIn();
+        $user = $this->signIn();
 
         $project = ProjectFactory::create();
 
         $this
-        ->actingAs($project->owner ?? factory(User::class)->create())
+        ->actingAs($project->owner ?? $user)
         ->patch($project->path(), [
             'notes' => 'changed notes.'
         ]);
@@ -172,17 +171,17 @@ class ManageProjectTest extends AbstractFeatureTestCase
             ->assertSessionHasErrors('description');
     }
 
-//    public function test_a_user_can_view_own_project()
-//    {
-//        $this->signIn();
-//
-//        $project = factory('App\Models\Project')->create(['owner_id' => auth()->id()]);
-//
-//        $this
-//            ->get($project->path())
-//            ->assertSee($project->title)
-//            ->assertSee($project->description);
-//    }
+    public function test_a_user_can_view_own_project()
+    {
+        $this->signIn();
+
+        $project = factory('App\Models\Project')->create(['owner_id' => auth()->id()]);
+
+        $this
+            ->get($project->path())
+            ->assertSee($project->title)
+            ->assertSee($project->description);
+    }
 
     public function test_an_auth_user_can_create_project()
     {
