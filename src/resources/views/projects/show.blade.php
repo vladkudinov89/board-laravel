@@ -3,8 +3,8 @@
 @section('content')
   <div class="flex items-center mb-3 py-4">
     <header class="flex justify-between w-full items-end">
-      <p class="text-normal text-grey text-sm">
-        <a class="font-normal text-grey text-sm no-underline" href="/projects">
+      <p class="text-normal text-default text-sm">
+        <a class="font-normal text-default text-sm no-underline" href="/projects">
           My Projects
         </a>
         / {{ $project->title }}
@@ -31,7 +31,7 @@
     <div class="lg:flex -mx-3">
       <div class="lg:w-3/4 px-3 mb-6">
         <div class="mb-8">
-          <h2 class="text-lg text-grey font-normal mb-3">
+          <h2 class="text-lg text-default font-normal mb-3">
             Tasks
           </h2>
 
@@ -39,7 +39,7 @@
 
         </div>
         <div class="">
-          <h2 class="text-lg text-grey font-normal mb-3">
+          <h2 class="text-lg text-default font-normal mb-3">
             General Notes
           </h2>
           <form action="{{ $project->path() }}" method="POST">
@@ -48,7 +48,7 @@
 
             <textarea
               name="notes"
-              class="card w-full"
+              class="text-default card w-full"
               style="min-height: 200px"
               placeholder="Make note for a project"
             >{{ $project->notes  }}</textarea>
