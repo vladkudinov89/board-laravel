@@ -22,6 +22,14 @@ class InvitationTest extends AbstractFeatureTestCase
             ->actingAs($user)
             ->post($project->path().'/invitations' , [])
             ->assertStatus(403);
+
+        $project->invite($user);
+
+        $this
+            ->actingAs($user)
+            ->post($project->path().'/invitations' , [])
+            ->assertStatus(403);
+
     }
 
     /** @test */
@@ -70,7 +78,7 @@ class InvitationTest extends AbstractFeatureTestCase
                 'email' => 'bad@email.com'
             ])
         ->assertSessionHasErrors([
-            'email' => 'You must have account.'
-        ]);
+            'email' => 'User must have an account.'
+        ] , null , 'invitations');
     }
 }

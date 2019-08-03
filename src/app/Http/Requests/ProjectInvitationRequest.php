@@ -15,7 +15,7 @@ class ProjectInvitationRequest extends FormRequest
      */
     public function authorize()
     {
-        return \Gate::allows('update' , $this->route('project'));
+        return \Gate::allows('manage' , $this->route('project'));
     }
 
     /**
@@ -33,7 +33,7 @@ class ProjectInvitationRequest extends FormRequest
     public function messages()
     {
         return [
-            'email.exists' => 'You must have account.'
+            'email.exists' => 'User must have an account.'
         ];
     }
 }

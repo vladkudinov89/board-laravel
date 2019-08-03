@@ -24,6 +24,8 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
     public function test_auth_user_can_create_project()
     {
+        $this->withMiddleware();
+
         $user = $this->signIn();
 
         $this->get('/projects/create')->assertStatus(200);
@@ -53,16 +55,17 @@ class ManageProjectTest extends AbstractFeatureTestCase
     /** @test */
     public function a_user_can_see_all_proj_they_have_been_invited_to_on_their_dashboard()
     {
+        $this->withMiddleware();
+
         $user = $this->signIn();
 
-        $project = ProjectFactory::create();
+        $project = factory(Project::class)->create(['owner_id' => $user]);
 
         $project->invite($user);
 
         $this->get('/projects')
             ->assertSee($project->title);
     }
-
 
     /** @test */
     public function unauth_user_cannot_delete_project()
@@ -173,11 +176,14 @@ class ManageProjectTest extends AbstractFeatureTestCase
 
     public function test_a_user_can_view_own_project()
     {
-        $this->signIn();
+        $this->withMiddleware();
 
-        $project = factory('App\Models\Project')->create(['owner_id' => auth()->id()]);
+        $user = $this->signIn();
+
+        $project = factory('App\Models\Project')->create(['owner_id' => $user]);
 
         $this
+            ->actingAs($user)
             ->get($project->path())
             ->assertSee($project->title)
             ->assertSee($project->description);

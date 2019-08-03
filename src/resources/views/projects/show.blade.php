@@ -63,7 +63,11 @@
       <div class="lg:w-1/4 px-3">
         @include('projects.card')
         @include ('projects.activity.card')
-        @include ('projects.invite' , [ 'project' => $project ] )
+
+        @can('manage' , $project)
+          @include ('projects.invite' , [ 'project' => $project ] )
+        @endcan
+
       </div>
     </div>
   </main>
