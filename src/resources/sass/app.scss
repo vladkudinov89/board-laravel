@@ -1,43 +1,17 @@
 @import "tailwind";
-// Fonts
-//@import url('https://fonts.googleapis.com/css?family=Nunito');
-// Variables
-@import 'variables';
 
-// Bootstrap
-//@import '~bootstrap/scss/bootstrap';
+@import 'themes/light';
+@import 'themes/dark';
 
-//.navbar-laravel {
-//  background-color: #fff;
-//  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-//}
+@import 'components/button';
+@import 'components/card';
 
-.button {
-  @apply .bg-button .text-white .no-underline .rounded-lg .text-sm .py-2 .px-5;
-  box-shadow: 0 2px 7px 0 #b0eaff;
+body,
+button {
+  @apply .text-default;
 }
 
-.card {
-  @apply .bg-card .p-5 .rounded-lg .shadow;
-  color : var(--text-default-color);
+.section {
+  @apply .px-8;
 }
-
-.theme-light {
-  --page-background-color: #f5f6f9;
-  --button-background-color: #47cdff;
-  --card-background-color: white;
-  --header-background-color: white;
-
-  --text-default-color: #222;
-}
-
-.theme-dark {
-  --page-background-color: #17181E;
-  --button-background-color: #59b6f9;
-  --card-background-color: #1F2027;
-  --header-background-color: #1f2027;
-
-  --text-default-color: white;
-}
-
 

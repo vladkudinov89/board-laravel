@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-  <div class="flex items-center mb-3 py-4">
+  <div class="flex items-center mb-6 pb-4">
     <header class="flex justify-between w-full items-end">
-      <p class="text-normal text-default text-sm">
-        <a class="font-normal text-default text-sm no-underline" href="/projects">
+      <p class="text-muted font-light">
+        <a href="/projects" class="text-muted no-underline hover:underline">
           My Projects
         </a>
         / {{ $project->title }}
@@ -31,7 +31,7 @@
     <div class="lg:flex -mx-3">
       <div class="lg:w-3/4 px-3 mb-6">
         <div class="mb-8">
-          <h2 class="text-lg text-default font-normal mb-3">
+          <h2 class="text-lg text-default font-light mb-3">
             Tasks
           </h2>
 
@@ -39,7 +39,7 @@
 
         </div>
         <div class="">
-          <h2 class="text-lg text-default font-normal mb-3">
+          <h2 class="text-lg text-muted font-light mb-3">
             General Notes
           </h2>
           <form action="{{ $project->path() }}" method="POST">
