@@ -53,6 +53,26 @@ class ManageProjectTest extends AbstractFeatureTestCase
     }
 
     /** @test */
+    public function tasks_can_be_included_as_part_a_new_project_creation()
+    {
+        $this->signIn();
+
+        $attributes = factory(Project::class)->raw();
+
+        $attributes['tasks'] = [
+            ['body' => 'task1'],
+            ['body' => 'task2'],
+        ];
+
+        $this->post('/projects', $attributes);
+
+//        $this->assertDatabaseHas('projects' , $attributes);
+
+        $this->assertCount(2, Project::first()->tasks);
+    }
+
+
+    /** @test */
     public function a_user_can_see_all_proj_they_have_been_invited_to_on_their_dashboard()
     {
         $this->withMiddleware();
@@ -103,7 +123,7 @@ class ManageProjectTest extends AbstractFeatureTestCase
             ->delete($project->path())
             ->assertRedirect('/projects');
 
-        $this->assertDatabaseMissing('projects' , $project->only('id'));
+        $this->assertDatabaseMissing('projects', $project->only('id'));
     }
 
 
@@ -114,15 +134,15 @@ class ManageProjectTest extends AbstractFeatureTestCase
         $project = ProjectFactory::create();
 
         $this
-        ->actingAs($project->owner ?? $user)
-        ->patch($project->path(), [
-            'notes' => 'changed notes.'
-        ]);
+            ->actingAs($project->owner ?? $user)
+            ->patch($project->path(), [
+                'notes' => 'changed notes.'
+            ]);
 
         $this
             ->assertDatabaseHas('projects', [
                 'notes' => 'changed notes.'
-        ]);
+            ]);
     }
 
     public function test_an_unauth_user_cannot_update_project()
@@ -200,7 +220,7 @@ class ManageProjectTest extends AbstractFeatureTestCase
     {
         $this->signIn();
 
-       $this->get('/projects/create')->assertStatus(200);
+        $this->get('/projects/create')->assertStatus(200);
 
     }
 
