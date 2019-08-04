@@ -19,7 +19,7 @@
   <!-- Styles -->
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body class="theme-dark bg-page">
+<body class="theme-light bg-page">
 <div id="app">
   <nav class="bg-header section">
     <div class="container mx-auto">
@@ -45,44 +45,35 @@
         <div>
 
           <!-- Right Side Of Navbar -->
-          <ul class="navbar-nav ml-auto list-reset">
+          <div class="flex items-center ml-auto list-reset">
             <!-- Authentication Links -->
             @guest
-              <li class="nav-item">
-                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-              </li>
-              <li class="nav-item">
-                @if (Route::has('register'))
-                  <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                @endif
-              </li>
+              <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+              @if (Route::has('register'))
+                <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+              @endif
             @else
-              <li class="nav-item dropdown">
-                <a id="navbarDropdown"
-                   class="flex items-center text-default no-underline text-sm"
-                   href="#" role="button" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false" v-pre>
-                  {{ Auth::user()->name }} <span class="caret"></span>
-                  <img width="35"
-                       class="rounded-full mr-3"
-                       src="https://www.gravatar.com/avatar/{{ md5(auth()->user()->email) }}?s=200">
-                </a>
 
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="{{ route('logout') }}"
-                     onclick="event.preventDefault();
-                                    document.getElementById('logout-form').submit();">
-                    {{ __('Logout') }}
-                  </a>
+            <theme-switcher></theme-switcher>
 
-                  <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                  </form>
-                </div>
-              </li>
+              <a
+                class="flex items-center text-default no-underline text-sm"
+                href="#" role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                v-pre
+              >
+                <img width="35"
+                     class="rounded-full mr-3"
+                     src="{{ gravatar_url(auth()->user()->email) }}">
+
+                {{Auth::user()->name}}
+              </a>
             @endguest
-          </ul>
+          </div>
         </div>
+
       </div>
 
     </div>
