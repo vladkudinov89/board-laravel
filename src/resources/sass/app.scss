@@ -1,24 +1,17 @@
 @import "tailwind";
 
-// Fonts
-//@import url('https://fonts.googleapis.com/css?family=Nunito');
+@import 'themes/light';
+@import 'themes/dark';
 
-// Variables
-@import 'variables';
+@import 'components/button';
+@import 'components/card';
 
-// Bootstrap
-//@import '~bootstrap/scss/bootstrap';
-
-//.navbar-laravel {
-//  background-color: #fff;
-//  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-//}
-
-.button{
-  @apply .bg-blue .text-white .no-underline .rounded-lg .text-sm .py-2 .px-5;
-    box-shadow: 0 2px 7px 0 #b0eaff;
+body,
+button {
+  @apply .text-default;
 }
 
-.card{
-    @apply .bg-white .p-5 .rounded-lg .shadow
+.section {
+  @apply .px-8;
 }
+
