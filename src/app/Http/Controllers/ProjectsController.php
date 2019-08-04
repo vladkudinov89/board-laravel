@@ -49,8 +49,19 @@ class ProjectsController extends AbstractController
 
         if (auth()->check()){
             $project = auth()->user()->projects()->create($attributes);
+
+            if(request()->has('tasks')){
+                foreach (request('tasks') as $task) {
+                    $project->addTask($task['body']);
+                }
+            }
+
         } else {
             return redirect('/login');
+        }
+
+        if(request()->wantsJson()){
+            return ['location' => $project->path()];
         }
 
         return redirect($project->path());

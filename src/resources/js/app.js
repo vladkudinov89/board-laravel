@@ -8,6 +8,10 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+import VModal from 'vue-js-modal';
+
+Vue.use(VModal);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -15,6 +19,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('theme-switcher', require('./components/ThemeSwitcher.vue'));
+Vue.component('new-project-modal', require('./components/NewProjectModal.vue'));
 
 const app = new Vue({
   el: '#app'
