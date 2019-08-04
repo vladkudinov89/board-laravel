@@ -5,7 +5,7 @@
         @csrf
 
          <div class="flex">
-             <input type="text" name="body" value="{{ $task->body }}" class="text-default bg-card w-full {{$task->completed ? 'text-grey' : ''}}">
+             <input type="text" name="body" value="{{ $task->body }}" class="text-default bg-card w-full {{ $task->completed ? 'line-through text-muted' : ''}}">
              <input type="checkbox" name="completed" onchange="this.form.submit()" {{$task->completed ? 'checked' : ''}}>
          </div>
     </form>
